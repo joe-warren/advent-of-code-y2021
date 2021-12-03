@@ -1,4 +1,4 @@
-module Day2.Part2 where
+module Day02.Part2 where
 
 import Control.Arrow (Kleisli (..), first, second)
 import Control.Monad ((<=<))
