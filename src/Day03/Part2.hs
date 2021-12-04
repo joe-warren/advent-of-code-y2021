@@ -1,6 +1,6 @@
 {-# LANGUAGE DerivingVia #-}
 
-module Day03.Part1 where
+module Day03.Part2 where
 
 import Control.Exception (evaluate)
 import Data.Bifunctor (bimap)
