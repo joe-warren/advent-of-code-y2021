@@ -23,14 +23,13 @@ fileParser :: Parser [((Int, Int), (Int, Int))]
 fileParser = MP.sepEndBy line MP.newline
 
 evalLine :: ((Int, Int), (Int, Int)) -> [(Int, Int)]
-evalLine ((x1, y1), (x2, y2)) = do
-    let fromTo s e = [min s e .. max s e]
-    x <- fromTo x1 x2
-    y <- fromTo y1 y2
-    return (x, y)
-
-isHorV :: ((Int, Int), (Int, Int)) -> Bool
-isHorV ((x1, y1), (x2, y2)) = x1 == x2 || y1 == y2
+evalLine ((x1, y1), (x2, y2)) = 
+    let fromTo s e = 
+         case s `compare` e of
+            EQ-> repeat s
+            LT -> [min s e .. max s e]
+            GT -> reverse [min s e .. max s e]
+    in zip (fromTo x1 x2) (fromTo y1 y2)
 
 newtype MonoidalMap k v = MonoidalMap {getMonoidalMap :: Map k v}
 
@@ -50,7 +49,7 @@ main = do
       Left e -> putStrLn $ MP.errorBundlePretty e
       Right lines -> do
           print $ length lines
-          let squares = count $ evalLine =<< filter isHorV lines 
+          let squares = count $ evalLine =<< lines 
           let sufficientSquares = Map.filter (>1) squares
           print $ length sufficientSquares
     return ()
